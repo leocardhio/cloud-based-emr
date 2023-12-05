@@ -1,0 +1,10 @@
+go 1.20
+
+use (
+	./service-auth
+	./service-auth-client
+	./service-lab
+	./service-outpatient
+	./service-pharmacy
+	./service-radiology
+)

@@ -1,0 +1,339 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: emr-client-auth
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: emr-client-auth
+  template:
+    metadata:
+      labels:
+        app: emr-client-auth
+    spec:
+      containers:
+        - image: leocardhio21/emr-client-auth:v1.07
+          imagePullPolicy: Always
+          name: emr-client-auth
+          resources:
+            requests:
+              memory: "50Mi"
+              cpu: "50m"
+            limits:
+              memory: "100Mi"
+              cpu: "100m"
+          livenessProbe:
+            httpGet:
+              path: /live
+              port: 8079
+            initialDelaySeconds: 10
+            periodSeconds: 2
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8079
+          ports:
+            - containerPort: 8079
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: emr-config
+          env:
+            - name: KMS_KEY_NAME
+              value: "auth-symmetric-key"
+            - name: SA_PRIVATE_KEY
+              value: "SA_PRIVATE_KEY_AUTH"
+            - name: JWT_PRIVATE_KEY
+              value: "JWT_ADMIN_PRIVATE_KEY"
+            - name: DB_PASSWORD
+              value: "DB_PASSWORD"
+      serviceAccountName: default
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: emr-auth
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: emr-auth
+  template:
+    metadata:
+      labels:
+        app: emr-auth
+    spec:
+      containers:
+        - image: leocardhio21/emr-auth:v1.07
+          imagePullPolicy: Always
+          name: emr-auth
+          resources:
+            requests:
+              memory: "50Mi"
+              cpu: "50m"
+            limits:
+              memory: "100Mi"
+              cpu: "100m"
+          livenessProbe:
+            httpGet:
+              path: /live
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 2
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8080
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: emr-config
+          env:
+            - name: KMS_KEY_NAME
+              value: "auth-symmetric-key"
+            - name: SA_PRIVATE_KEY
+              value: "SA_PRIVATE_KEY_AUTH"
+            - name: JWT_PRIVATE_KEY
+              value: "JWT_USER_PRIVATE_KEY"
+            - name: RSA_PRIVATE_KEY
+              value: "RSA_SIGNATURE_PRIVATE"
+            - name: DB_PASSWORD
+              value: "DB_PASSWORD"
+      serviceAccountName: default
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: emr-lab
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: emr-lab
+  template:
+    metadata:
+      labels:
+        app: emr-lab
+    spec:
+      containers:
+        - image: leocardhio21/emr-lab:v1.07
+          imagePullPolicy: Always
+          name: emr-lab
+          resources:
+            requests:
+              memory: "50Mi"
+              cpu: "50m"
+            limits:
+              memory: "100Mi"
+              cpu: "100m"
+          livenessProbe:
+            httpGet:
+              path: /live
+              port: 8081
+            initialDelaySeconds: 10
+            periodSeconds: 2
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8081
+          ports:
+            - containerPort: 8081
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: emr-config
+          env:
+            - name: KMS_KEY_NAME
+              value: "service-symmetric-key"
+            - name: SA_PRIVATE_KEY
+              value: "SA_PRIVATE_KEY_FASKES"
+            - name: DB_PASSWORD
+              value: "DB_PASSWORD"
+            - name: RSA_PRIVATE_KEY
+              value: "RSA_SIGNATURE_PRIVATE"
+      serviceAccountName: default
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: emr-outpatient
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: emr-outpatient
+  template:
+    metadata:
+      labels:
+        app: emr-outpatient
+    spec:
+      containers:
+        - image: leocardhio21/emr-outpatient:v1.07
+          imagePullPolicy: Always
+          name: emr-outpatient
+          resources:
+            requests:
+              memory: "50Mi"
+              cpu: "50m"
+            limits:
+              memory: "100Mi"
+              cpu: "100m"
+          livenessProbe:
+            httpGet:
+              path: /live
+              port: 8082
+            initialDelaySeconds: 10
+            periodSeconds: 2
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8082
+          ports:
+            - containerPort: 8082
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: emr-config
+          env:
+            - name: KMS_KEY_NAME
+              value: "service-symmetric-key"
+            - name: SA_PRIVATE_KEY
+              value: "SA_PRIVATE_KEY_FASKES"
+            - name: DB_PASSWORD
+              value: "DB_PASSWORD"
+            - name: RSA_PRIVATE_KEY
+              value: "RSA_SIGNATURE_PRIVATE"
+            - name: LAB_SERVICE_URL
+              value: "http://emr-lab.default.svc.cluster.local:8081"
+            - name: PHARMACY_SERVICE_URL
+              value: "http://emr-pharmacy.default.svc.cluster.local:8083"
+            - name: RADIOLOGY_SERVICE_URL
+              value: "http://emr-radiology.default.svc.cluster.local:8084"
+              
+      serviceAccountName: default
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: emr-pharmacy
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: emr-pharmacy
+  template:
+    metadata:
+      labels:
+        app: emr-pharmacy
+    spec:
+      containers:
+        - image: leocardhio21/emr-pharmacy:v1.07
+          imagePullPolicy: Always
+          name: emr-pharmacy
+          resources:
+            requests:
+              memory: "50Mi"
+              cpu: "50m"
+            limits:
+              memory: "100Mi"
+              cpu: "100m"
+          livenessProbe:
+            httpGet:
+              path: /live
+              port: 8083
+            initialDelaySeconds: 10
+            periodSeconds: 2
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8083
+          ports:
+            - containerPort: 8083
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: emr-config
+          env:
+            - name: KMS_KEY_NAME
+              value: "service-symmetric-key"
+            - name: SA_PRIVATE_KEY
+              value: "SA_PRIVATE_KEY_FASKES"
+            - name: DB_PASSWORD
+              value: "DB_PASSWORD"
+            - name: RSA_PRIVATE_KEY
+              value: "RSA_SIGNATURE_PRIVATE"
+      serviceAccountName: default
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: emr-radiology
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: emr-radiology
+  template:
+    metadata:
+      labels:
+        app: emr-radiology
+    spec:
+      containers:
+        - image: leocardhio21/emr-radiology:v1.07
+          imagePullPolicy: Always
+          name: emr-radiology
+          resources:
+            requests:
+              memory: "50Mi"
+              cpu: "50m"
+            limits:
+              memory: "100Mi"
+              cpu: "100m"
+          livenessProbe:
+            httpGet:
+              path: /live
+              port: 8084
+            initialDelaySeconds: 10
+            periodSeconds: 2
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8084
+          ports:
+            - containerPort: 8084
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: emr-config
+          env:
+            - name: KMS_KEY_NAME
+              value: "service-symmetric-key"
+            - name: SA_PRIVATE_KEY
+              value: "SA_PRIVATE_KEY_FASKES"
+            - name: DB_PASSWORD
+              value: "DB_PASSWORD"
+            - name: RSA_PRIVATE_KEY
+              value: "RSA_SIGNATURE_PRIVATE"
+      serviceAccountName: default
+---

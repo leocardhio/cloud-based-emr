@@ -1,0 +1,78 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: emr-client-auth
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: emr-client-auth
+  minReplicas: 1
+  maxReplicas: 15 
+  targetCPUUtilizationPercentage: 40
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: emr-auth
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: emr-auth
+  minReplicas: 1
+  maxReplicas: 15 
+  targetCPUUtilizationPercentage: 40
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: emr-lab
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: emr-lab
+  minReplicas: 1
+  maxReplicas: 15 
+  targetCPUUtilizationPercentage: 40
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: emr-outpatient
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: emr-outpatient
+  minReplicas: 1
+  maxReplicas: 15 
+  targetCPUUtilizationPercentage: 40
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: emr-pharmacy
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: emr-pharmacy
+  minReplicas: 1
+  maxReplicas: 15 
+  targetCPUUtilizationPercentage: 40
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: emr-radiology
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: emr-radiology
+  minReplicas: 1
+  maxReplicas: 15 
+  targetCPUUtilizationPercentage: 40
+---

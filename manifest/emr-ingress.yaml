@@ -1,0 +1,67 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: emr-ingress
+  annotations:
+    kubernetes.io/ingress.class: gce
+spec:
+  rules:
+    - http:
+        paths:
+          - pathType: Prefix
+            path: /api/v1/client
+            backend:
+              service:
+                name: emr-client-auth
+                port:
+                  number: 8079
+          - pathType: Prefix
+            path: /api/v1/users
+            backend:
+              service:
+                name: emr-auth
+                port:
+                  number: 8080
+          - pathType: Prefix
+            path: /api/v1/admin
+            backend:
+              service:
+                name: emr-auth
+                port:
+                  number: 8080
+          - pathType: Prefix
+            path: /api/v1/resource/laboratory
+            backend:
+              service:
+                name: emr-lab
+                port:
+                  number: 8081
+          - pathType: Prefix
+            path: /api/v1/resource/outpatient
+            backend:
+              service:
+                name: emr-outpatient
+                port:
+                  number: 8082
+          - pathType: Prefix
+            path: /api/v1/resource/identity
+            backend:
+              service:
+                name: emr-outpatient
+                port:
+                  number: 8082
+          - pathType: Prefix
+            path: /api/v1/resource/pharmacy
+            backend:
+              service:
+                name: emr-pharmacy
+                port:
+                  number: 8083
+          - pathType: Prefix
+            path: /api/v1/resource/radiology
+            backend:
+              service:
+                name: emr-radiology
+                port:
+                  number: 8084
+---

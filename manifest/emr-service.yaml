@@ -1,0 +1,96 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: emr-client-auth
+  namespace: default
+  annotations:
+    cloud.google.com/backend-config: '{"default": "emr-backend-config"}'
+spec:
+  ports:
+    - port: 8079
+      protocol: TCP
+      targetPort: 8079
+  selector:
+    app: emr-client-auth
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: emr-auth
+  namespace: default
+  annotations:
+    cloud.google.com/backend-config: '{"default": "emr-backend-config"}'
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: emr-auth
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: emr-lab
+  namespace: default
+  annotations:
+    cloud.google.com/backend-config: '{"default": "emr-backend-config"}'
+spec:
+  ports:
+    - port: 8081
+      protocol: TCP
+      targetPort: 8081
+  selector:
+    app: emr-lab
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: emr-outpatient
+  namespace: default
+  annotations:
+    cloud.google.com/backend-config: '{"default": "emr-backend-config"}'
+spec:
+  ports:
+    - port: 8082
+      protocol: TCP
+      targetPort: 8082
+  selector:
+    app: emr-outpatient
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: emr-pharmacy
+  namespace: default
+  annotations:
+    cloud.google.com/backend-config: '{"default": "emr-backend-config"}'
+spec:
+  ports:
+    - port: 8083
+      protocol: TCP
+      targetPort: 8083
+  selector:
+    app: emr-pharmacy
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: emr-radiology
+  namespace: default
+  annotations:
+    cloud.google.com/backend-config: '{"default": "emr-backend-config"}'
+spec:
+  ports:
+    - port: 8084
+      protocol: TCP
+      targetPort: 8084
+  selector:
+    app: emr-radiology
+  type: NodePort
+---

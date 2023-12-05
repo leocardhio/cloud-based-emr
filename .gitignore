@@ -1,0 +1,6 @@
+**/secrets/*
+**/key/*
+
+/app
+/*.yaml
+.dockerignore

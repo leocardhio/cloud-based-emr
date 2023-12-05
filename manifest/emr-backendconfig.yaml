@@ -1,0 +1,10 @@
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: emr-backend-config
+spec:
+  healthCheck:
+    checkIntervalSec: 2
+    requestPath: /ready
+    timeoutSec: 2
+    unhealthyThreshold: 6
